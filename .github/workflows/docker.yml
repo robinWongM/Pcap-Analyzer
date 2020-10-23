@@ -1,0 +1,29 @@
+name: Publish Docker
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-server:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2.3.3
+    - name: Build image for blaze server
+      uses: docker/build-push-action@v1.1.1
+      with:
+        # Username used to log in to a Docker registry. If not set then no login will occur
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        # Password or personal access token used to log in to a Docker registry. If not set then no login will occur
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        # Docker repository to tag the image with
+        repository: m208/pcap-analyzer
+        # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
+        tags: master
+        # Automatically tags the built image with the git reference as per the readme
+        tag_with_ref: true
+        # Automatically tags the built image with the git short SHA as per the readme
+        tag_with_sha: true
